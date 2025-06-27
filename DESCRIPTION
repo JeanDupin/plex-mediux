@@ -1,0 +1,12 @@
+Package: plexapi
+Type: Package
+Title: Upload posters from MediUX to your Plex server
+Version: 0.0.0.9000
+Author: Jean Dupin
+Maintainer: Jean Dupin <yourself@somewhere.net>
+Description: For now, nothing
+    Then, will help you to upload Plex posters from MediUX to your Plex server.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2
