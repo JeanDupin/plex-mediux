@@ -10,5 +10,43 @@
 #' upload_poster("test.yaml")
 #' }
 upload_poster <- function(file){
-  print("INIT")
+  # Cheks on the .yaml file
+  if(!file.exists(file)){
+    stop("File does not exist.",
+         call. = F)
+  }
+  if(!grepl("\\.yaml$|\\.yml",file)){
+    stop("Use a .yaml or .yml file.",
+         call. = F)
+  }
+
+  # File
+  fichier <-
+    yaml::read_yaml(file)
+
+  # Movies
+  movies <-
+    sapply(fichier,function(.x){"seasons" %in% names(.x)},
+           USE.NAMES = F, simplify = T) |>
+    (\(.){fichier[!.]})()
+
+  if(length(movies) >= 1){
+    movies <-
+      data.frame(
+        tmdb = names(movies),
+        poster = sapply(movies,function(.x){.x[[1]]},simplify = T,USE.NAMES = F),
+        row.names = NULL
+      )
+
+    upload_poster_movies(movies)
+    cat("Movies done.\n")
+  }
+
+  # Shows
+  shows <-
+    sapply(fichier,function(.x){"seasons" %in% names(.x)},
+           USE.NAMES = F, simplify = T) |>
+    (\(.){fichier[.]})()
+
+
 }
