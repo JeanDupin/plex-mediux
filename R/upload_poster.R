@@ -34,7 +34,12 @@ upload_poster <- function(file){
     movies <-
       data.frame(
         tmdb = names(movies),
-        poster = sapply(movies,function(.x){.x[[1]]},simplify = T,USE.NAMES = F),
+        poster = sapply(movies,function(.x){
+          ifelse(is.null(.x[["url_poster"]]),NA,.x[["url_poster"]])
+        },simplify = T,USE.NAMES = F),
+        bg = sapply(movies,function(.x){
+          ifelse(is.null(.x[["url_background"]]),NA,.x[["url_background"]])
+        },simplify = T,USE.NAMES = F),
         row.names = NULL
       )
 

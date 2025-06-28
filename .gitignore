@@ -3,6 +3,7 @@
 .Rapp.history
 *.Rproj
 *.Rbuildignore
+.Rprofile
 
 # Session Data files
 .RData

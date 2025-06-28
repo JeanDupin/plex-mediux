@@ -22,7 +22,7 @@ upload_poster_movies <- function(input){
   id.section <-
     paste0(plex.url,"/library/sections/all") |>
     httr2::request() |>
-    httr2::req_headers("X-Plex-Token" = plex.token) |>
+    httr2::req_headers_redacted("X-Plex-Token" = plex.token) |>
     httr2::req_perform() |>
     httr2::resp_body_xml() |>
     xml2::as_list() |>
@@ -36,7 +36,7 @@ upload_poster_movies <- function(input){
   movies.RK <-
     paste0(plex.url,"/library/sections/",id.section,"/all") |>
     httr2::request() |>
-    httr2::req_headers("X-Plex-Token" = plex.token) |>
+    httr2::req_headers_redacted("X-Plex-Token" = plex.token) |>
     httr2::req_perform() |>
     httr2::resp_body_xml() |>
     xml2::as_list() |>
@@ -54,7 +54,7 @@ upload_poster_movies <- function(input){
     movies.GUID[i] <-
       paste0(plex.url,"/library/metadata/",movies.RK[i]) |>
       httr2::request() |>
-      httr2::req_headers("X-Plex-Token" = plex.token) |>
+      httr2::req_headers_redacted("X-Plex-Token" = plex.token) |>
       httr2::req_perform() |>
       httr2::resp_body_xml() |>
       xml2::as_list() |>
@@ -83,8 +83,21 @@ upload_poster_movies <- function(input){
     merge(
       movies.db,
       input,
-      by = "tmdb"
+      by = "tmdb",
+      sort = F
     )
+
+  # Get the titles for verbose
+  for(i in seq_len(nrow(movies.db))){
+    movies.db[i,"title"] <-
+      paste0(plex.url,"/library/metadata/",movies.db[i,"rk"]) |>
+      httr2::request() |>
+      httr2::req_headers_redacted("X-Plex-Token" = plex.token) |>
+      httr2::req_perform() |>
+      httr2::resp_body_xml() |>
+      (\(.){xml2::as_list(.)[[1]][[1]]})() |>
+      (\(.){attr(.,"title")})()
+  }
 
   # Upload posters
   if(nrow(movies.db) == 0){
@@ -99,16 +112,44 @@ upload_poster_movies <- function(input){
             call. = F)
   }
 
-  cat("Uploading posters...")
-  for(i in seq_len(nrow(movies.db))){
-    cat("\rUploading posters... ", i, "/",nrow(movies.db), sep = "")
-    paste0(plex.url,"/library/metadata/",
-           movies.db[i,"rk"],"/posters?url=",movies.db[i,"poster"]) |>
-      httr2::request() |>
-      httr2::req_headers("X-Plex-Token" = plex.token) |>
-      httr2::req_method("POST") |>
-      httr2::req_perform(verbosity = 0)
+  movies.db.poster <-
+    movies.db[!is.na(movies.db$poster),]
+  movies.db.bg <-
+    movies.db[!is.na(movies.db$bg),]
+
+  if(nrow(movies.db.poster) >= 1){
+    cat("Uploading posters...\n")
+    max.title.size = max(nchar(movies.db.poster$title))+1
+    movies.db.poster$title <- sprintf("%-*s", max.title.size, movies.db.poster$title)
+    for(i in seq_len(nrow(movies.db.poster))){
+      cat("\r", i, "/",nrow(movies.db.poster)," - ",
+          movies.db.poster[i,"title"],sep = "")
+      paste0(plex.url,"/library/metadata/",
+             movies.db.poster[i,"rk"],"/posters?url=",movies.db.poster[i,"poster"]) |>
+        httr2::request() |>
+        httr2::req_headers_redacted("X-Plex-Token" = plex.token) |>
+        httr2::req_method("POST") |>
+        httr2::req_perform(verbosity = 0)
+    }
+    cat("\n")
   }
-  cat("\n")
+
+  if(nrow(movies.db.bg) >= 1){
+    cat("Uploading backgrounds...\n")
+    max.title.size = max(nchar(movies.db.bg$title))+1
+    movies.db.bg$title <- sprintf("%-*s", max.title.size, movies.db.bg$title)
+    for(i in seq_len(nrow(movies.db.bg))){
+      cat("\r", i, "/",nrow(movies.db.bg)," - ",
+          movies.db.bg[i,"title"],sep = "")
+      paste0(plex.url,"/library/metadata/",
+             movies.db.bg[i,"rk"],"/art?url=",movies.db.bg[i,"bg"]) |>
+        httr2::request() |>
+        httr2::req_headers_redacted("X-Plex-Token" = plex.token) |>
+        httr2::req_method("PUT") |>
+        httr2::req_perform(verbosity = 0)
+    }
+    cat("\n")
+  }
+
 
 }
