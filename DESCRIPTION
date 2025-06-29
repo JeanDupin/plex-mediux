@@ -1,7 +1,7 @@
 Package: plexapi
 Type: Package
 Title: Upload posters from MediUX to your Plex server
-Version: 0.0.0.9000
+Version: 1.0.0
 Author: Jean Dupin
 Maintainer: Jean Dupin <yourself@somewhere.net>
 Description: For now, nothing

@@ -2,18 +2,21 @@
 % Please edit documentation in R/upload_poster.R
 \name{upload_poster}
 \alias{upload_poster}
-\title{Upload posters from the mediux files}
+\title{Upload posters from MediUX YAML file}
 \usage{
-upload_poster(file)
+upload_poster(file, section = "all")
 }
 \arguments{
-\item{file}{The .yaml file with the MediUX posters.}
+\item{file}{The `.yaml` file containing the MediUX poster definitions.}
+
+\item{section}{Which section of the file you want to update.
+By default, all sections are processed. Accepts `"movies"`, `"shows"`, or `"all"`.}
 }
 \value{
-Verbatim for each poster if it uploaded or not
+Prints a message for each poster indicating whether it was successfully uploaded.
 }
 \description{
-Upload posters from the mediux files
+Upload posters from MediUX YAML file
 }
 \examples{
 \dontrun{

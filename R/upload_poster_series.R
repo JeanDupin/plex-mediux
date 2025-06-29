@@ -1,8 +1,10 @@
-#' Generic function to upload the tv shows posters
+#' Upload posters for TV series from MediUX YAML files
 #'
-#' @param input A list of series in MediUX format
+#' @param input The `.yaml` file containing the MediUX shows as a `list` format.
 #'
-#' @return The verbatim
+#' @return Prints a message for each series poster indicating whether it was successfully uploaded.
+#'
+#' @keywords internal
 upload_poster_series <- function(input){
 
   # Plex parameters (Token & Url)

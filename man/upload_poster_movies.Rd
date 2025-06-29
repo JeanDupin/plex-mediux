@@ -2,16 +2,17 @@
 % Please edit documentation in R/upload_poster_movies.R
 \name{upload_poster_movies}
 \alias{upload_poster_movies}
-\title{Generic function to upload the movies posters}
+\title{Upload posters for movies from MediUX YAML files}
 \usage{
 upload_poster_movies(input)
 }
 \arguments{
-\item{input}{A data.frame of movies and poster url}
+\item{input}{The `data.frame` of movies.}
 }
 \value{
-The verbatim
+Prints a message for each movie poster indicating whether it was successfully uploaded.
 }
 \description{
-Generic function to upload the movies posters
+Upload posters for movies from MediUX YAML files
 }
+\keyword{internal}

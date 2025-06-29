@@ -1,8 +1,10 @@
-#' Generic function to upload the movies posters
+#' Upload posters for movies from MediUX YAML files
 #'
-#' @param input A data.frame of movies and poster url
+#' @param input The `data.frame` of movies.
 #'
-#' @return The verbatim
+#' @return Prints a message for each movie poster indicating whether it was successfully uploaded.
+#'
+#' @keywords internal
 upload_poster_movies <- function(input){
 
   # Plex parameters (Token & Url)
