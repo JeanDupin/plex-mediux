@@ -44,7 +44,7 @@ upload_poster <- function(file){
       )
 
     upload_poster_movies(movies)
-    cat("Movies done.\n")
+    cat("Movies done.\n\n")
   }
 
   # Shows
@@ -52,6 +52,11 @@ upload_poster <- function(file){
     sapply(fichier,function(.x){"seasons" %in% names(.x)},
            USE.NAMES = F, simplify = T) |>
     (\(.){fichier[.]})()
+
+  if(length(shows) >= 1){
+    upload_poster_series(shows)
+    cat("TV Shows done.\n\n")
+  }
 
 
 }

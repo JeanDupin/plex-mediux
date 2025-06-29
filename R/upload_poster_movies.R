@@ -68,6 +68,9 @@ upload_poster_movies <- function(input){
       (\(.){names(.) <- NULL; .})() |>
       (\(.){
         gsub("[^0-9]","",.[grepl("tmdb",.)])
+      })() |>
+      (\(.){
+        ifelse(length(.) == 0,"000",.)
       })()
   }
   cat("\n")
@@ -142,10 +145,10 @@ upload_poster_movies <- function(input){
       cat("\r", i, "/",nrow(movies.db.bg)," - ",
           movies.db.bg[i,"title"],sep = "")
       paste0(plex.url,"/library/metadata/",
-             movies.db.bg[i,"rk"],"/art?url=",movies.db.bg[i,"bg"]) |>
+             movies.db.bg[i,"rk"],"/arts?url=",movies.db.bg[i,"bg"]) |>
         httr2::request() |>
         httr2::req_headers_redacted("X-Plex-Token" = plex.token) |>
-        httr2::req_method("PUT") |>
+        httr2::req_method("POST") |>
         httr2::req_perform(verbosity = 0)
     }
     cat("\n")
