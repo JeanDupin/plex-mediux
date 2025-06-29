@@ -240,7 +240,7 @@ upload_poster_series <- function(input){
     for(i in seq_len(nrow(seasons.db))){
       cat(paste0("Uploading ",seasons.db[i,"title"]," poster..."))
       paste0(plex.url,"/library/metadata/",
-             seasons.db[i,"rk"],"/posters?url=",poster) |>
+             seasons.db[i,"rk"],"/posters?url=",seasons.db[i,"poster"]) |>
         httr2::request() |>
         httr2::req_headers_redacted("X-Plex-Token" = plex.token) |>
         httr2::req_method("POST") |>
@@ -253,7 +253,7 @@ upload_poster_series <- function(input){
     for(i in seq_len(nrow(episodes.db))){
       cat(paste0("Uploading ",episodes.db[i,"title"]," poster..."))
       paste0(plex.url,"/library/metadata/",
-             episodes.db[i,"rk"],"/posters?url=",poster) |>
+             episodes.db[i,"rk"],"/posters?url=",episodes.db[i,"poster"]) |>
         httr2::request() |>
         httr2::req_headers_redacted("X-Plex-Token" = plex.token) |>
         httr2::req_method("POST") |>
