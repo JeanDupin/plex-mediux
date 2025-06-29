@@ -149,7 +149,10 @@ upload_poster_series <- function(input){
           httr2::req_headers_redacted("X-Plex-Token" = plex.token) |>
           httr2::req_perform() |>
           httr2::resp_body_xml() |>
-          (\(.){xml2::as_list(.)[[1]][-1]})() |>
+          (\(.){xml2::as_list(.)[[1]]})() |>
+          (\(.){
+            ifelse(length(.) > 1, .[-1],.)
+          })() |>
           lapply(function(.x){
             data.frame(
               "index" = attr(.x,"index"),
