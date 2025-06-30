@@ -151,7 +151,11 @@ upload_poster_series <- function(input){
           httr2::resp_body_xml() |>
           (\(.){xml2::as_list(.)[[1]]})() |>
           (\(.){
-            ifelse(length(.) > 1, .[-1],.)
+            if(length(.) > 1){
+              return(.[-1])
+            } else {
+              return(.)
+            }
           })() |>
           lapply(function(.x){
             data.frame(
